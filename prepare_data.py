@@ -16,8 +16,8 @@ for i in range(0, 7480):
 	content = label.readlines()
 	for line in content:
 		words = line.split(" ")
-		if (words[0] == "Car" || words[0] == "Van" || words [0] == "Truck") &&
-			(float(words[1]) < 0.5) && (int(words[2]) < 2) :
+		if (words[0] == "Car" or words[0] == "Van" or words [0] == "Truck") and
+			(float(words[1]) < 0.5) and (int(words[2]) < 2) :
 			bbox = map(int, words[4:7])
 			# left, top, right, bottom
 			# make surounding
