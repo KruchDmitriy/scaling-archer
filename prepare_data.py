@@ -7,7 +7,6 @@ parser.add_argument("-p", "--path", required = True, help = "path to KITTI datas
 args = vars(parser.parse_args())
 
 os.chdir(args["path"])
-os.mkdir("prepared_data")
 
 index = 0
 for i in range(0, 7480):
@@ -35,6 +34,6 @@ for i in range(0, 7480):
 			crop_img = image[bbox[1]:bbox[3], bbox[0]:bbox[2]]
 			
 			dst = cv2.resize(crop_img, (227, 227))
-			cv2.imwrite("prepared_data/%06d.png" % index, dst)
+			cv2.imwrite("prepared_data/training/%06d.png" % index, dst)
 			index += 1
 			print(index)
