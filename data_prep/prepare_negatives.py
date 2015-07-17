@@ -7,7 +7,7 @@ ACCEPTED_PERCENT_INTERSECT = 0.3
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-p", "--path", required = True, help = "path to KITTI dataset")
-parser.add_argument("-i", "--inter_perc", required = False, 
+parser.add_argument("-i", "--inter_perc", required = False,
 	help = "if the percent of area intersection < than this value, this is negative")
 
 args = vars(parser.parse_args())
@@ -64,4 +64,4 @@ for num_file in range(0, 7480):
 				cv2.imwrite("prepared_data/negatives/%06d.png" % index, dst)
 				index += 1
 				print(index)
-				
+
