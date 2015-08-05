@@ -5,14 +5,14 @@ test = []
 
 for i in range(21798):
     if i < 4360:
-        test.append("training/%06d.txt 1" % i)
+        test.append("/home/kruchinin_d/Projects/KITTI/prepared_data/training/%06d.png 1" % i)
     else:
-        train.append("training/%06d.txt 1" % i)
+        train.append("/home/kruchinin_d/Projects/KITTI/prepared_data/training/%06d.png 1" % i)
 for i in range(89664):
     if i < 17439:
-        test.append("negatives/%06d.txt 0" % i)
+        test.append("/home/kruchinin_d/Projects/KITTI/prepared_data/negatives/%06d.png 0" % i)
     else:
-        train.append("negatives/%06d.txt 0" % i)
+        train.append("/home/kruchinin_d/Projects/KITTI/prepared_data/negatives/%06d.png 0" % i)
 
 shuffle(train)
 shuffle(test)
