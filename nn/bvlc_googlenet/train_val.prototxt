@@ -8,7 +8,7 @@ layer {
     phase: TRAIN
   }
   image_data_param {
-    source: "../../../KITTI/prepared_data/train.txt"
+    source: "/home/kruchinin_d/Projects/KITTI/prepared_data/train.txt"
     batch_size: 32
   }
 }
@@ -21,7 +21,7 @@ layer {
     phase: TEST
   }
   image_data_param {
-    source: "../../../KITTI/prepared_data/test.txt"
+    source: "/home/kruchinin_d/Projects/KITTI/prepared_data/test.txt"
     batch_size: 50
   }
 }
@@ -885,10 +885,10 @@ layer {
   }
 }
 layer {
-  name: "loss1/classifier"
+  name: "ft_loss1/classifier"
   type: "InnerProduct"
   bottom: "loss1/fc"
-  top: "loss1/classifier"
+  top: "ft_loss1/classifier"
   param {
     lr_mult: 1
     decay_mult: 1
@@ -911,7 +911,7 @@ layer {
 layer {
   name: "loss1/loss"
   type: "SoftmaxWithLoss"
-  bottom: "loss1/classifier"
+  bottom: "ft_loss1/classifier"
   bottom: "label"
   top: "loss1/loss1"
   loss_weight: 0.3
@@ -919,7 +919,7 @@ layer {
 layer {
   name: "loss1/top-1"
   type: "Accuracy"
-  bottom: "loss1/classifier"
+  bottom: "ft_loss1/classifier"
   bottom: "label"
   top: "loss1/top-1"
   include {
@@ -1635,10 +1635,10 @@ layer {
   }
 }
 layer {
-  name: "loss2/classifier"
+  name: "ft_loss2/classifier"
   type: "InnerProduct"
   bottom: "loss2/fc"
-  top: "loss2/classifier"
+  top: "ft_loss2/classifier"
   param {
     lr_mult: 1
     decay_mult: 1
@@ -1661,7 +1661,7 @@ layer {
 layer {
   name: "loss2/loss"
   type: "SoftmaxWithLoss"
-  bottom: "loss2/classifier"
+  bottom: "ft_loss2/classifier"
   bottom: "label"
   top: "loss2/loss1"
   loss_weight: 0.3
@@ -1669,7 +1669,7 @@ layer {
 layer {
   name: "loss2/top-1"
   type: "Accuracy"
-  bottom: "loss2/classifier"
+  bottom: "ft_loss2/classifier"
   bottom: "label"
   top: "loss2/top-1"
   include {
@@ -2335,10 +2335,10 @@ layer {
   }
 }
 layer {
-  name: "loss3/classifier"
+  name: "ft_loss3/classifier"
   type: "InnerProduct"
   bottom: "pool5/7x7_s1"
-  top: "loss3/classifier"
+  top: "ft_loss3/classifier"
   param {
     lr_mult: 1
     decay_mult: 1
@@ -2361,7 +2361,7 @@ layer {
 layer {
   name: "loss3/loss3"
   type: "SoftmaxWithLoss"
-  bottom: "loss3/classifier"
+  bottom: "ft_loss3/classifier"
   bottom: "label"
   top: "loss3/loss3"
   loss_weight: 1
@@ -2369,7 +2369,7 @@ layer {
 layer {
   name: "loss3/top-1"
   type: "Accuracy"
-  bottom: "loss3/classifier"
+  bottom: "ft_loss3/classifier"
   bottom: "label"
   top: "loss3/top-1"
   include {
