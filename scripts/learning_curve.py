@@ -1,12 +1,16 @@
 import numpy as np
 import re
-import click
+import argparse
 from matplotlib import pylab as plt
 
 
-@click.command()
-@click.argument('files', nargs=-1, type=click.Path(exists=True))
-def main(files):
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-f", "--files", required = True, help = "pathes to logs")
+
+    args = vars(parser.parse_args())
+    files = args["files"]
+
     plt.style.use('ggplot')
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
