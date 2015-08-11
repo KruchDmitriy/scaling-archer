@@ -3,10 +3,10 @@ import cv2
 import argparse
 import re
 
-# if the percent of area intersection < than this value, this is negative
-ACCEPTED_PERCENT_INTERSECT = 0.3
+def main():
+    # if the percent of area intersection < than this value, this is negative
+    ACCEPTED_PERCENT_INTERSECT = 0.3
 
-def main()
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--path", required = True, help = "path to Pascal VOC dataset (train)")
     parser.add_argument("-i", "--inter_perc", required = False,
@@ -24,24 +24,8 @@ def main()
     for name in img_names.readlines():
         name = name.split(" ")
         img = cv2.imread("JPEGImages/" + name[0] + ".jpg")
-        if name[1] == "-1":
-            #w, h = img.size()
-            #side = (w / 5) if w >= h else (h / 5)
-            #for i in range(h / side):
-            #    for j in range(w / side):
-            #        crop_img = img[i*side:(i+1)*side, j*side:(j+1)*side]
-            #        dst = cv2.resize(crop_img, (227, 227))
-            #        cv2.imwrite("prepared_data/%06d.jpg" % index, dst)
-            #        index += 1
-        else:
-            annot = open("Annotations/" + name[0] + ".xml")
-
-            pattern = r"\t\t<bndbox>\n.*<xmin>(?P<xmin>\d)<\\xmin>"
-            #pattern = r"Iteration (?P<iter_num>\d+), loss = (?P<loss_val>\d+\.\d+e?[+-]?\d+)"
-            result = parse_log(annot, pattern, 2)
-
-
-            w, h = img.size()
+        if name[1] == "-1\n":
+            h, w, c = img.shape
             side = (w / 5) if w >= h else (h / 5)
             for i in range(h / side):
                 for j in range(w / side):
@@ -49,6 +33,33 @@ def main()
                     dst = cv2.resize(crop_img, (227, 227))
                     cv2.imwrite("prepared_data/%06d.jpg" % index, dst)
                     index += 1
+        else:
+            annot = "Annotations/" + name[0] + ".xml"
+            pattern = r"\t\t<bndbox>\n.*<xmin>(?P<xmin>\d+)</xmin>\n.*<ymin>(?P<ymin>\d+)</ymin>\n.*<xmax>(?P<xmax>\d+)</xmax>\n.*<ymax>(?P<ymax>\d+)</ymax>"
+            bboxs = parse_log(annot, pattern, 4)
+            print annot
+	    
+            h, w, c = img.shape
+            side = (w / 5) if w >= h else (h / 5)
+            for i in range(h / side):
+                for j in range(w / side):
+            	    accept = True
+            	    for bbox in bboxs:
+                	# left, top, right, bottom
+	        	# compute area intersection
+    	        	left = max(bbox[0], j*side)
+    	        	top = max(bbox[1], i*side)
+    	        	right = min(bbox[2], (j+1)*side)
+    	        	bottom = min(bbox[3], (i+1)*side)
+    	        	percent_inter = (bottom - top) * (right - left) / (side * side)
+            		if (percent_inter > ACCEPTED_PERCENT_INTERSECT):
+            		    accept = False
+            	    if accept:
+                	crop_img = img[i*side:(i+1)*side, j*side:(j+1)*side]
+                	dst = cv2.resize(crop_img, (227, 227))
+                	cv2.imwrite("prepared_data/%06d.jpg" % index, dst)
+                	index += 1
+            print index
 
 def parse_log(log_file, pattern, num_objects):
     with open(log_file, 'r') as log_file:
@@ -56,12 +67,14 @@ def parse_log(log_file, pattern, num_objects):
 
     objects = []
     for r in re.findall(pattern, log):
-        str_tmp = ""
+        tmp = []
         if num_objects == 1:
-            str_tmp = r
+            tmp = int(r)
         else:
             for i in range(num_objects):
-                str_tmp += r[i] + " "
-            str_tmp += "\n"
-        objects.append(str_tmp)
+                tmp.append(int(r[i]))
+        objects.append(tmp)
     return objects
+
+if __name__ == '__main__':
+    main()

@@ -48,7 +48,7 @@ for num_file in range(0, 7480):
 			bboxs = bboxs + bbox
 	for i in range(0, 2):
 		for j in range(0, 6):
-			accept = true
+			accept = True
 			for bbox in bboxs:
 				# left, top, right, bottom
 				# compute area intersection
@@ -58,7 +58,7 @@ for num_file in range(0, 7480):
 				bottom = min(bbox[3], area[3])
 				percent_inter = (bottom - top) * (right - left) / (227 * 227)
 				if (percent_inter > ACCEPTED_PERCENT_INTERSECT):
-					accept = false
+					accept = False
 			if accept:
 				crop_img = image[area[1]:area[3], area[0]:area[2]]
 				cv2.imwrite("prepared_data/negatives/%06d.png" % index, dst)
