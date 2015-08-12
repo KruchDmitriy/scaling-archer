@@ -16,6 +16,7 @@ def main():
 
     if (args["inter_perc"] != ""):
         ACCEPTED_PERCENT_INTERSECT = float(args["inter_perc"])
+    print ACCEPTED_PERCENT_INTERSECT
 
     os.chdir(args["path"])
 
@@ -47,11 +48,11 @@ def main():
             	    for bbox in bboxs:
                 	# left, top, right, bottom
 	        	# compute area intersection
-    	        	left = max(bbox[0], j*side)
-    	        	top = max(bbox[1], i*side)
-    	        	right = min(bbox[2], (j+1)*side)
-    	        	bottom = min(bbox[3], (i+1)*side)
-    	        	percent_inter = (bottom - top) * (right - left) / (side * side)
+    	        	left = min(max(bbox[0], j*side), (j+1)*side)
+    	        	top = min(max(bbox[1], i*side), (i+1)*side)
+    	        	right = max(min(bbox[2], (j+1)*side), j*side)
+    	        	bottom = max(min(bbox[3], (i+1)*side), i*side)
+    	        	percent_inter = float((bottom - top) * (right - left)) / float((side * side))
             		if (percent_inter > ACCEPTED_PERCENT_INTERSECT):
             		    accept = False
             	    if accept:
